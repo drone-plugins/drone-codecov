@@ -31,5 +31,8 @@ docker build --rm -t plugins/codecov .
 ```
 docker run --rm \
   -e PLUGIN_TOKEN=xxx \
+  -e DRONE_COMMIT=5f17090 \
+  -v $(pwd):$(pwd) \
+  -w $(pwd) \
   plugins/codecov
 ```
