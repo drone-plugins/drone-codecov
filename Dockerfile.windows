@@ -6,5 +6,13 @@ LABEL maintainer="Drone.IO Community <drone-dev@googlegroups.com>" `
   org.label-schema.vendor="Drone.IO Community" `
   org.label-schema.schema-version="1.0"
 
+SHELL ["powershell", "-Command", "$ErrorActionPreference = 'Stop'; $ProgressPreference = 'SilentlyContinue';"]
+
+RUN Invoke-WebRequest 'https://github.com/codecov/codecov-exe/releases/download/1.0.3/Codecov.zip' -OutFile 'codecov.zip'; `
+  Expand-Archive -Path codecov.zip -DestinationPath c:\ -Force; `
+  $env:PATH = 'c:\Codecov;{0}' -f $env:PATH; `
+  Set-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\Environment\' -Name Path -Value $env:PATH; `
+  Remove-Item -Path codecov.zip;
+
 ADD drone-codecov.exe /drone-codecov.exe
 ENTRYPOINT [ "\\drone-codecov.exe" ]

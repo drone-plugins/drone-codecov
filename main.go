@@ -30,12 +30,6 @@ func main() {
 			Usage:  "name for coverage upload",
 			EnvVar: "PLUGIN_NAME",
 		},
-		cli.StringFlag{
-			Name:   "pattern",
-			Usage:  "coverage file pattern",
-			Value:  "**/coverage.out",
-			EnvVar: "PLUGIN_PATTERN",
-		},
 		cli.StringSliceFlag{
 			Name:   "file",
 			Usage:  "files for coverage upload",
@@ -45,6 +39,26 @@ func main() {
 			Name:   "flag",
 			Usage:  "flags for coverage upload",
 			EnvVar: "PLUGIN_FLAGS",
+		},
+		cli.StringSliceFlag{
+			Name:   "env",
+			Usage:  "inject environment",
+			EnvVar: "PLUGIN_ENV",
+		},
+		cli.BoolFlag{
+			Name:   "dump",
+			Usage:  "dump instead of upload",
+			EnvVar: "PLUGIN_DUMP",
+		},
+		cli.BoolFlag{
+			Name:   "verbose",
+			Usage:  "print verbose output",
+			EnvVar: "PLUGIN_VERBOSE",
+		},
+		cli.BoolTFlag{
+			Name:   "required",
+			Usage:  "errors on failed upload",
+			EnvVar: "PLUGIN_REQUIRED",
 		},
 		cli.StringFlag{
 			Name:   "repo.fullname",
@@ -105,11 +119,15 @@ func run(c *cli.Context) error {
 			Tag:    c.String("commit.branch"),
 		},
 		Config: Config{
-			Token:   c.String("token"),
-			Name:    c.String("name"),
-			Pattern: c.String("pattern"),
-			Files:   c.StringSlice("file"),
-			Flags:   c.StringSlice("flag"),
+			Token:    c.String("token"),
+			Name:     c.String("name"),
+			Pattern:  c.String("pattern"),
+			Files:    c.StringSlice("file"),
+			Flags:    c.StringSlice("flag"),
+			Env:      c.StringSlice("env"),
+			Dump:     c.Bool("dump"),
+			Verbose:  c.Bool("verbose"),
+			Required: c.Bool("required"),
 		},
 	}
 

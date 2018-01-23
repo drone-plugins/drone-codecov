@@ -10,7 +10,7 @@ pipeline:
       - go vet
       - |
         for PKG in $(go list ./... | grep -v /vendor/); do
-          go test -cover -coverprofile $PKG/coverage.out $PKG
+          go test -cover -coverprofile $GOPATH/src/$PKG/coverage.out $PKG
         done
 
   build_linux_amd64:
@@ -29,54 +29,54 @@ pipeline:
           go build -v -ldflags "-X main.version=${DRONE_TAG##v} -X main.build=${DRONE_BUILD_NUMBER}" -a -o release/linux/amd64/drone-codecov
         fi
 
-  build_linux_i386:
-    image: golang:1.9
-    pull: true
-    group: build
-    environment:
-      - GOOS=linux
-      - GOARCH=386
-      - CGO_ENABLED=0
-    commands:
-      - |
-        if test "${DRONE_TAG}" = ""; then
-          go build -v -ldflags "-X main.build=${DRONE_BUILD_NUMBER}" -a -o release/linux/i386/drone-codecov
-        else
-          go build -v -ldflags "-X main.version=${DRONE_TAG##v} -X main.build=${DRONE_BUILD_NUMBER}" -a -o release/linux/i386/drone-codecov
-        fi
+  # build_linux_i386:
+  #   image: golang:1.9
+  #   pull: true
+  #   group: build
+  #   environment:
+  #     - GOOS=linux
+  #     - GOARCH=386
+  #     - CGO_ENABLED=0
+  #   commands:
+  #     - |
+  #       if test "${DRONE_TAG}" = ""; then
+  #         go build -v -ldflags "-X main.build=${DRONE_BUILD_NUMBER}" -a -o release/linux/i386/drone-codecov
+  #       else
+  #         go build -v -ldflags "-X main.version=${DRONE_TAG##v} -X main.build=${DRONE_BUILD_NUMBER}" -a -o release/linux/i386/drone-codecov
+  #       fi
 
-  build_linux_arm64:
-    image: golang:1.9
-    pull: true
-    group: build
-    environment:
-      - GOOS=linux
-      - GOARCH=arm64
-      - CGO_ENABLED=0
-    commands:
-      - |
-        if test "${DRONE_TAG}" = ""; then
-          go build -v -ldflags "-X main.build=${DRONE_BUILD_NUMBER}" -a -o release/linux/arm64/drone-codecov
-        else
-          go build -v -ldflags "-X main.version=${DRONE_TAG##v} -X main.build=${DRONE_BUILD_NUMBER}" -a -o release/linux/arm64/drone-codecov
-        fi
+  # build_linux_arm64:
+  #   image: golang:1.9
+  #   pull: true
+  #   group: build
+  #   environment:
+  #     - GOOS=linux
+  #     - GOARCH=arm64
+  #     - CGO_ENABLED=0
+  #   commands:
+  #     - |
+  #       if test "${DRONE_TAG}" = ""; then
+  #         go build -v -ldflags "-X main.build=${DRONE_BUILD_NUMBER}" -a -o release/linux/arm64/drone-codecov
+  #       else
+  #         go build -v -ldflags "-X main.version=${DRONE_TAG##v} -X main.build=${DRONE_BUILD_NUMBER}" -a -o release/linux/arm64/drone-codecov
+  #       fi
 
-  build_linux_arm:
-    image: golang:1.9
-    pull: true
-    group: build
-    environment:
-      - GOOS=linux
-      - GOARCH=arm
-      - CGO_ENABLED=0
-      - GOARM=7
-    commands:
-      - |
-        if test "${DRONE_TAG}" = ""; then
-          go build -v -ldflags "-X main.build=${DRONE_BUILD_NUMBER}" -a -o release/linux/arm/drone-codecov
-        else
-          go build -v -ldflags "-X main.version=${DRONE_TAG##v} -X main.build=${DRONE_BUILD_NUMBER}" -a -o release/linux/arm/drone-codecov
-        fi
+  # build_linux_arm:
+  #   image: golang:1.9
+  #   pull: true
+  #   group: build
+  #   environment:
+  #     - GOOS=linux
+  #     - GOARCH=arm
+  #     - CGO_ENABLED=0
+  #     - GOARM=7
+  #   commands:
+  #     - |
+  #       if test "${DRONE_TAG}" = ""; then
+  #         go build -v -ldflags "-X main.build=${DRONE_BUILD_NUMBER}" -a -o release/linux/arm/drone-codecov
+  #       else
+  #         go build -v -ldflags "-X main.version=${DRONE_TAG##v} -X main.build=${DRONE_BUILD_NUMBER}" -a -o release/linux/arm/drone-codecov
+  #       fi
 
   publish_linux_amd64:
     image: plugins/docker:17.05
@@ -90,41 +90,41 @@ pipeline:
     when:
       event: [ push, tag ]
 
-  publish_linux_i386:
-    image: plugins/docker:17.05
-    pull: true
-    secrets: [ docker_username, docker_password ]
-    group: docker
-    repo: plugins/codecov
-    auto_tag: true
-    auto_tag_suffix: i386
-    dockerfile: Dockerfile.i386
-    when:
-      event: [ push, tag ]
+  # publish_linux_i386:
+  #   image: plugins/docker:17.05
+  #   pull: true
+  #   secrets: [ docker_username, docker_password ]
+  #   group: docker
+  #   repo: plugins/codecov
+  #   auto_tag: true
+  #   auto_tag_suffix: i386
+  #   dockerfile: Dockerfile.i386
+  #   when:
+  #     event: [ push, tag ]
 
-  publish_linux_arm64:
-    image: plugins/docker:17.05
-    pull: true
-    secrets: [ docker_username, docker_password ]
-    group: docker
-    repo: plugins/codecov
-    auto_tag: true
-    auto_tag_suffix: arm64
-    dockerfile: Dockerfile.arm64
-    when:
-      event: [ push, tag ]
+  # publish_linux_arm64:
+  #   image: plugins/docker:17.05
+  #   pull: true
+  #   secrets: [ docker_username, docker_password ]
+  #   group: docker
+  #   repo: plugins/codecov
+  #   auto_tag: true
+  #   auto_tag_suffix: arm64
+  #   dockerfile: Dockerfile.arm64
+  #   when:
+  #     event: [ push, tag ]
 
-  publish_linux_arm:
-    image: plugins/docker:17.05
-    pull: true
-    secrets: [ docker_username, docker_password ]
-    group: docker
-    repo: plugins/codecov
-    auto_tag: true
-    auto_tag_suffix: arm
-    dockerfile: Dockerfile.arm
-    when:
-      event: [ push, tag ]
+  # publish_linux_arm:
+  #   image: plugins/docker:17.05
+  #   pull: true
+  #   secrets: [ docker_username, docker_password ]
+  #   group: docker
+  #   repo: plugins/codecov
+  #   auto_tag: true
+  #   auto_tag_suffix: arm
+  #   dockerfile: Dockerfile.arm
+  #   when:
+  #     event: [ push, tag ]
 
   manifests:
     image: plugins/manifest:1
