@@ -14,5 +14,5 @@ RUN Invoke-WebRequest 'https://github.com/codecov/codecov-exe/releases/download/
   Set-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\Environment\' -Name Path -Value $env:PATH; `
   Remove-Item -Path codecov.zip;
 
-ADD drone-codecov.exe /drone-codecov.exe
-ENTRYPOINT [ "\\drone-codecov.exe" ]
+ADD drone-codecov.exe c:\drone-codecov.exe
+ENTRYPOINT [ "c:\\drone-codecov.exe" ]
