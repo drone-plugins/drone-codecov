@@ -116,7 +116,7 @@ func run(c *cli.Context) error {
 		Commit: Commit{
 			Sha:    c.String("commit.sha"),
 			Branch: c.String("commit.branch"),
-			Tag:    c.String("commit.branch"),
+			Tag:    c.String("commit.tag"),
 		},
 		Config: Config{
 			Token:    c.String("token"),
