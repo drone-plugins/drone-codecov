@@ -59,6 +59,10 @@ func (p *Plugin) command() *exec.Cmd {
 		args = append(args, fmt.Sprintf("-f '%s'", file))
 	}
 
+	for _, path := range p.Config.Paths {
+		args = append(args, fmt.Sprintf("-s '%s'", path))
+	}
+
 	fmt.Println("$ codecov.exe", strings.Join(args, " "))
 
 	return exec.Command(

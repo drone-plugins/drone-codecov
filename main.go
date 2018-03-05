@@ -31,6 +31,11 @@ func main() {
 			EnvVar: "PLUGIN_NAME",
 		},
 		cli.StringSliceFlag{
+			Name:   "path",
+			Usage:  "paths for searching for coverage files",
+			EnvVar: "PLUGIN_PATHS",
+		},
+		cli.StringSliceFlag{
 			Name:   "file",
 			Usage:  "files for coverage upload",
 			EnvVar: "PLUGIN_FILES",
@@ -122,6 +127,7 @@ func run(c *cli.Context) error {
 			Token:    c.String("token"),
 			Name:     c.String("name"),
 			Pattern:  c.String("pattern"),
+			Paths:    c.StringSlice("path"),
 			Files:    c.StringSlice("file"),
 			Flags:    c.StringSlice("flag"),
 			Env:      c.StringSlice("env"),
