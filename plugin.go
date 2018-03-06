@@ -29,6 +29,7 @@ type (
 		Name     string
 		Pattern  string
 		Files    []string
+		Paths    []string
 		Flags    []string
 		Env      []string
 		Dump     bool
