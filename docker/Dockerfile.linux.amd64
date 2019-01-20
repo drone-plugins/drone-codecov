@@ -1,4 +1,4 @@
-FROM plugins/base:arm
+FROM plugins/base:linux-amd64
 
 LABEL maintainer="Drone.IO Community <drone-dev@googlegroups.com>" \
   org.label-schema.name="Drone Codecov" \
@@ -9,5 +9,5 @@ RUN apk add --no-cache bash git mercurial curl && \
   curl -sLo /bin/codecov https://codecov.io/bash && \
   chmod +x /bin/codecov
 
-ADD release/linux/arm/drone-codecov /bin/
+ADD release/linux/amd64/drone-codecov /bin/
 ENTRYPOINT ["/bin/drone-codecov"]
