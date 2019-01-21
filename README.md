@@ -7,7 +7,6 @@
 [![](https://images.microbadger.com/badges/image/plugins/codecov.svg)](https://microbadger.com/images/plugins/codecov "Get your own image badge on microbadger.com")
 [![Go Doc](https://godoc.org/github.com/drone-plugins/drone-codecov?status.svg)](http://godoc.org/github.com/drone-plugins/drone-codecov)
 [![Go Report](https://goreportcard.com/badge/github.com/drone-plugins/drone-codecov)](https://goreportcard.com/report/github.com/drone-plugins/drone-codecov)
-[![](https://images.microbadger.com/badges/image/plugins/codecov.svg)](https://microbadger.com/images/plugins/codecov "Get your own image badge on microbadger.com")
 
 Drone plugin to send coverage reports to [Codecov](https://codecov.io/). For the usage information and a listing of the available options please take a look at [the docs](http://plugins.drone.io/drone-plugins/drone-codecov/).
 
