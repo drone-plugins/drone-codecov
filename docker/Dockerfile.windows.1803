@@ -1,0 +1,17 @@
+# escape=`
+FROM plugins/base:windows-1803
+
+LABEL maintainer="Drone.IO Community <drone-dev@googlegroups.com>" `
+  org.label-schema.name="Drone Codecov" `
+  org.label-schema.vendor="Drone.IO Community" `
+  org.label-schema.schema-version="1.0"
+
+ENV CODECOV_VERSION 1.0.3
+
+RUN Invoke-WebRequest ('https://github.com/codecov/codecov-exe/releases/download/{0}/Codecov.zip' -f $env:CODECOV_VERSION) -OutFile 'codecov.zip'; `
+  Expand-Archive -Path codecov.zip -DestinationPath C:\ -Force; `
+  New-Item -ItemType directory -Path 'C:/codecov'; `
+  Remove-Item -Path codecov.zip;
+
+ADD release/windows/amd64/drone-codecov.exe C:/bin/drone-codecov.exe
+ENTRYPOINT [ "C:\\bin\\drone-codecov.exe" ]
