@@ -64,42 +64,6 @@ func main() {
 			EnvVars: []string{"PLUGIN_REQUIRED"},
 			Value:   true,
 		},
-		&cli.StringFlag{
-			Name:    "repo.fullname",
-			Usage:   "repository full name",
-			EnvVars: []string{"CI_REPO"},
-		},
-		&cli.StringFlag{
-			Name:    "commit.branch",
-			Value:   "master",
-			Usage:   "commit branch",
-			EnvVars: []string{"CI_COMMIT_SOURCE_BRANCH"},
-		},
-		&cli.StringFlag{
-			Name:    "commit.sha",
-			Usage:   "commit sha",
-			EnvVars: []string{"CI_COMMIT_SHA"},
-		},
-		&cli.StringFlag{
-			Name:    "commit.tag",
-			Usage:   "commit tag",
-			EnvVars: []string{"CI_COMMIT_TAG"},
-		},
-		&cli.IntFlag{
-			Name:    "build.number",
-			Usage:   "build number",
-			EnvVars: []string{"CI_BUILD_NUMBER"},
-		},
-		&cli.StringFlag{
-			Name:    "build.link",
-			Usage:   "build link",
-			EnvVars: []string{"CI_BUILD_LINK"},
-		},
-		&cli.IntFlag{
-			Name:    "pull.request",
-			Usage:   "pull request",
-			EnvVars: []string{"CI_COMMIT_PULL_REQUEST"},
-		},
 	}
 
 	if err := app.Run(os.Args); err != nil {
@@ -109,31 +73,15 @@ func main() {
 
 func run(c *cli.Context) error {
 	plugin := Plugin{
-		Repo: Repo{
-			Fullname: c.String("repo.fullname"),
-		},
-		Build: Build{
-			Number:      c.Int("build.number"),
-			Link:        c.String("build.link"),
-			PullRequest: c.Int("pull.request"),
-		},
-		Commit: Commit{
-			Sha:    c.String("commit.sha"),
-			Branch: c.String("commit.branch"),
-			Tag:    c.String("commit.tag"),
-		},
-		Config: Config{
-			Token:    c.String("token"),
-			Name:     c.String("name"),
-			Pattern:  c.String("pattern"),
-			Paths:    c.StringSlice("path"),
-			Files:    c.StringSlice("file"),
-			Flags:    c.StringSlice("flag"),
-			Env:      c.StringSlice("env"),
-			Verbose:  c.Bool("verbose"),
-			DryRun:   c.Bool("dry_run"),
-			Required: c.Bool("required"),
-		},
+		Token:    c.String("token"),
+		Name:     c.String("name"),
+		Paths:    c.StringSlice("path"),
+		Files:    c.StringSlice("file"),
+		Flags:    c.StringSlice("flag"),
+		Env:      c.StringSlice("env"),
+		Verbose:  c.Bool("verbose"),
+		DryRun:   c.Bool("dry_run"),
+		Required: c.Bool("required"),
 	}
 
 	return plugin.Exec()
