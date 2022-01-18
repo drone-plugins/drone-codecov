@@ -32,7 +32,6 @@ type (
 		Paths    []string
 		Flags    []string
 		Env      []string
-		Dump     bool
 		Verbose  bool
 		Required bool
 	}

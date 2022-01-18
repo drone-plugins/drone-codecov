@@ -1,3 +1,4 @@
+//go:build !windows
 // +build !windows
 
 package main
@@ -42,14 +43,6 @@ func (p *Plugin) command() *exec.Cmd {
 
 	if len(p.Config.Env) != 0 {
 		args = append(args, fmt.Sprintf("-e %s", strings.Join(p.Config.Env, ",")))
-	}
-
-	if p.Config.Verbose {
-		args = append(args, "-v")
-	}
-
-	if p.Config.Dump {
-		args = append(args, "-d")
 	}
 
 	if p.Config.Required {

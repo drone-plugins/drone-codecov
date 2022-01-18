@@ -4,11 +4,11 @@ import (
 	"log"
 	"os"
 
-	"github.com/urfave/cli"
+	"github.com/urfave/cli/v2"
 )
 
 var (
-	version = "unknown"
+	version = "next"
 )
 
 func main() {
@@ -18,86 +18,82 @@ func main() {
 	app.Action = run
 	app.Version = version
 	app.Flags = []cli.Flag{
-		cli.StringFlag{
-			Name:   "token",
-			Usage:  "token for authentication",
-			EnvVar: "PLUGIN_TOKEN,CODECOV_TOKEN",
+		&cli.StringFlag{
+			Name:    "token",
+			Usage:   "token for authentication",
+			EnvVars: []string{"PLUGIN_TOKEN", "CODECOV_TOKEN"},
 		},
-		cli.StringFlag{
-			Name:   "name",
-			Usage:  "name for coverage upload",
-			EnvVar: "PLUGIN_NAME",
+		&cli.StringFlag{
+			Name:    "name",
+			Usage:   "name for coverage upload",
+			EnvVars: []string{"PLUGIN_NAME"},
 		},
-		cli.StringSliceFlag{
-			Name:   "path",
-			Usage:  "paths for searching for coverage files",
-			EnvVar: "PLUGIN_PATHS",
+		&cli.StringSliceFlag{
+			Name:    "path",
+			Usage:   "paths for searching for coverage files",
+			EnvVars: []string{"PLUGIN_PATHS"},
 		},
-		cli.StringSliceFlag{
-			Name:   "file",
-			Usage:  "files for coverage upload",
-			EnvVar: "PLUGIN_FILES",
+		&cli.StringSliceFlag{
+			Name:    "file",
+			Usage:   "files for coverage upload",
+			EnvVars: []string{"PLUGIN_FILES"},
 		},
-		cli.StringSliceFlag{
-			Name:   "flag",
-			Usage:  "flags for coverage upload",
-			EnvVar: "PLUGIN_FLAGS",
+		&cli.StringSliceFlag{
+			Name:    "flag",
+			Usage:   "flags for coverage upload",
+			EnvVars: []string{"PLUGIN_FLAGS"},
 		},
-		cli.StringSliceFlag{
-			Name:   "env",
-			Usage:  "inject environment",
-			EnvVar: "PLUGIN_ENV",
+		&cli.StringSliceFlag{
+			Name:    "env",
+			Usage:   "inject environment",
+			EnvVars: []string{"PLUGIN_ENV"},
 		},
-		cli.BoolFlag{
-			Name:   "dump",
-			Usage:  "dump instead of upload",
-			EnvVar: "PLUGIN_DUMP",
+		&cli.BoolFlag{
+			Name:    "verbose",
+			Usage:   "print verbose output",
+			EnvVars: []string{"PLUGIN_VERBOSE"},
 		},
-		cli.BoolFlag{
-			Name:   "verbose",
-			Usage:  "print verbose output",
-			EnvVar: "PLUGIN_VERBOSE",
+		&cli.BoolFlag{
+			Name:    "required",
+			Usage:   "errors on failed upload",
+			EnvVars: []string{"PLUGIN_REQUIRED"},
+			Value:   true,
 		},
-		cli.BoolTFlag{
-			Name:   "required",
-			Usage:  "errors on failed upload",
-			EnvVar: "PLUGIN_REQUIRED",
+		&cli.StringFlag{
+			Name:    "repo.fullname",
+			Usage:   "repository full name",
+			EnvVars: []string{"CI_REPO"},
 		},
-		cli.StringFlag{
-			Name:   "repo.fullname",
-			Usage:  "repository full name",
-			EnvVar: "DRONE_REPO",
+		&cli.StringFlag{
+			Name:    "commit.branch",
+			Value:   "master",
+			Usage:   "commit branch",
+			EnvVars: []string{"CI_COMMIT_SOURCE_BRANCH"},
 		},
-		cli.StringFlag{
-			Name:   "commit.branch",
-			Value:  "master",
-			Usage:  "commit branch",
-			EnvVar: "DRONE_BRANCH",
+		&cli.StringFlag{
+			Name:    "commit.sha",
+			Usage:   "commit sha",
+			EnvVars: []string{"CI_COMMIT_SHA"},
 		},
-		cli.StringFlag{
-			Name:   "commit.sha",
-			Usage:  "commit sha",
-			EnvVar: "DRONE_COMMIT",
+		&cli.StringFlag{
+			Name:    "commit.tag",
+			Usage:   "commit tag",
+			EnvVars: []string{"CI_COMMIT_TAG"},
 		},
-		cli.StringFlag{
-			Name:   "commit.tag",
-			Usage:  "commit tag",
-			EnvVar: "DRONE_TAG",
+		&cli.IntFlag{
+			Name:    "build.number",
+			Usage:   "build number",
+			EnvVars: []string{"CI_BUILD_NUMBER"},
 		},
-		cli.IntFlag{
-			Name:   "build.number",
-			Usage:  "build number",
-			EnvVar: "DRONE_BUILD_NUMBER",
+		&cli.StringFlag{
+			Name:    "build.link",
+			Usage:   "build link",
+			EnvVars: []string{"CI_BUILD_LINK"},
 		},
-		cli.StringFlag{
-			Name:   "build.link",
-			Usage:  "build link",
-			EnvVar: "DRONE_BUILD_LINK",
-		},
-		cli.IntFlag{
-			Name:   "pull.request",
-			Usage:  "pull request",
-			EnvVar: "DRONE_PULL_REQUEST",
+		&cli.IntFlag{
+			Name:    "pull.request",
+			Usage:   "pull request",
+			EnvVars: []string{"CI_COMMIT_PULL_REQUEST"},
 		},
 	}
 
@@ -129,7 +125,6 @@ func run(c *cli.Context) error {
 			Files:    c.StringSlice("file"),
 			Flags:    c.StringSlice("flag"),
 			Env:      c.StringSlice("env"),
-			Dump:     c.Bool("dump"),
 			Verbose:  c.Bool("verbose"),
 			Required: c.Bool("required"),
 		},
