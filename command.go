@@ -10,8 +10,7 @@ import (
 )
 
 func (_ *Plugin) command(args []string) *exec.Cmd {
-	cmd := fmt.Sprintf("/bin/codecov %s", strings.Join(args, " "))
-	fmt.Printf("$ %s\n", cmd)
+	fmt.Println("$ /bin/codecov", strings.Join(args, " "))
 
 	return exec.Command("/bin/codecov",
 		args...,
