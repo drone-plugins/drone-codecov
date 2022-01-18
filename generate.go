@@ -1,30 +1,27 @@
-// +build windows
-
 package main
 
 import (
 	"fmt"
-	"os/exec"
 	"strconv"
 	"strings"
 )
 
-func (p *Plugin) command() *exec.Cmd {
+func (p *Plugin) generateArgs() []string {
 	args := []string{
-		"--no-color",
-		fmt.Sprintf("-c %s", p.Commit.Sha),
+		"/bin/codecov",
+		fmt.Sprintf("-C %s", p.Commit.Sha),
 	}
 
 	if p.Commit.Branch != "" {
-		args = append(args, fmt.Sprintf("--branch %s", p.Commit.Branch))
+		args = append(args, fmt.Sprintf("-B %s", p.Commit.Branch))
 	}
 
 	if p.Commit.Tag != "" {
-		args = append(args, fmt.Sprintf("--tag %s", p.Commit.Tag))
+		args = append(args, fmt.Sprintf("-T %s", p.Commit.Tag))
 	}
 
 	if p.Build.PullRequest != 0 {
-		args = append(args, fmt.Sprintf("--pr %s", strconv.Itoa(p.Build.PullRequest)))
+		args = append(args, fmt.Sprintf("-P %s", strconv.Itoa(p.Build.PullRequest)))
 	}
 
 	if p.Build.Number != 0 {
@@ -36,23 +33,19 @@ func (p *Plugin) command() *exec.Cmd {
 	}
 
 	if len(p.Config.Flags) != 0 {
-		args = append(args, fmt.Sprintf("--flag %s", strings.Join(p.Config.Flags, ",")))
+		args = append(args, fmt.Sprintf("-F %s", strings.Join(p.Config.Flags, ",")))
 	}
 
 	if len(p.Config.Env) != 0 {
 		args = append(args, fmt.Sprintf("-e %s", strings.Join(p.Config.Env, ",")))
 	}
 
-	if p.Config.Verbose {
-		args = append(args, "-v")
-	}
-
-	if p.Config.Dump {
-		args = append(args, "-d")
+	if p.Config.DryRun {
+		args = append(args, "--dryRun")
 	}
 
 	if p.Config.Required {
-		args = append(args, "--required")
+		args = append(args, "--nonZero")
 	}
 
 	for _, file := range p.Config.Files {
@@ -63,10 +56,5 @@ func (p *Plugin) command() *exec.Cmd {
 		args = append(args, fmt.Sprintf("-s '%s'", path))
 	}
 
-	fmt.Println("$ codecov.exe", strings.Join(args, " "))
-
-	return exec.Command(
-		"codecov.exe",
-		args...,
-	)
+	return args
 }

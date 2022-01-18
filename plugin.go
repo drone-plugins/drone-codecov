@@ -1,10 +1,9 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"os"
-
-	"github.com/pkg/errors"
 )
 
 type (
@@ -33,20 +32,15 @@ type (
 		Flags    []string
 		Env      []string
 		Verbose  bool
+		DryRun   bool
 		Required bool
 	}
 
-	Internal struct {
-		Matches []string
-		Merged  []byte
-	}
-
 	Plugin struct {
-		Repo     Repo
-		Build    Build
-		Commit   Commit
-		Config   Config
-		Internal Internal
+		Repo   Repo
+		Build  Build
+		Commit Commit
+		Config Config
 	}
 )
 
@@ -59,7 +53,8 @@ func (p *Plugin) Exec() error {
 		return errors.New("you must provide a commit")
 	}
 
-	cmd := p.command()
+	args := p.generateArgs()
+	cmd := p.command(args)
 
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr

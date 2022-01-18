@@ -54,6 +54,11 @@ func main() {
 			EnvVars: []string{"PLUGIN_VERBOSE"},
 		},
 		&cli.BoolFlag{
+			Name:    "dry_run",
+			Usage:   "dont upload files",
+			EnvVars: []string{"PLUGIN_DRY_RUN"},
+		},
+		&cli.BoolFlag{
 			Name:    "required",
 			Usage:   "errors on failed upload",
 			EnvVars: []string{"PLUGIN_REQUIRED"},
@@ -126,6 +131,7 @@ func run(c *cli.Context) error {
 			Flags:    c.StringSlice("flag"),
 			Env:      c.StringSlice("env"),
 			Verbose:  c.Bool("verbose"),
+			DryRun:   c.Bool("dry_run"),
 			Required: c.Bool("required"),
 		},
 	}
