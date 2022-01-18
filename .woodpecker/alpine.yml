@@ -1,23 +1,20 @@
 pipeline:
-  build:
-    image: golang:1.16
-    commands:
-      - make build
-
   dryrun:
     image: plugins/docker
-    dockerfile: docker/Dockerfile.alpine
-    dry_run: true
-    repo: woodpeckerci/plugin-codecov
-    tags: latest-alpine
+    settings:
+      dockerfile: docker/Dockerfile.alpine
+      dry_run: true
+      repo: woodpeckerci/plugin-codecov
+      tag: latest-alpine
     when:
       event: pull_request
 
   publish-next:
     image: plugins/docker
-    dockerfile: docker/Dockerfile.alpine
-    repo: woodpeckerci/plugin-codecov
-    tags: next-alpine
+    settings:
+      dockerfile: docker/Dockerfile.alpine
+      repo: woodpeckerci/plugin-codecov
+      tag: next-alpine
     secrets: [docker_username, docker_password]
     when:
       branch: master
@@ -25,9 +22,10 @@ pipeline:
 
   publish-tag:
     image: plugins/docker
-    dockerfile: docker/Dockerfile.alpine
-    repo: woodpeckerci/plugin-codecov
-    tags: [latest-alpine, "${DRONE_TAG}-alpine"]
+    settings:
+      dockerfile: docker/Dockerfile.alpine
+      repo: woodpeckerci/plugin-codecov
+      tag: [latest-alpine, "${DRONE_TAG}-alpine"]
     secrets: [docker_username, docker_password]
     when:
       event: tag
