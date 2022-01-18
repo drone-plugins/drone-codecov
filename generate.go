@@ -5,7 +5,7 @@ import (
 )
 
 func (p *Plugin) generateArgs() []string {
-	args := []string{"-Q", "Woodpecker Plugin"}
+	args := []string{"-Q", "'Woodpecker Plugin'"}
 
 	if p.Name != "" {
 		args = append(args, "--name", p.Name)

@@ -1,0 +1,15 @@
+FROM golang:1.17 AS build
+
+WORKDIR /src
+COPY . .
+RUN go build -ldflags '-s -w -extldflags "-static"' -o plugin-codecov
+RUN curl -Os https://uploader.codecov.io/latest/alpine/codecov
+RUN chmod +x codecov
+
+FROM alpine:3.15
+RUN apk add -U --no-cache ca-certificates
+
+COPY --from=build src/codecov /bin/
+COPY --from=build src/plugin-codecov /bin/
+
+ENTRYPOINT ["/bin/plugin-codecov"]
