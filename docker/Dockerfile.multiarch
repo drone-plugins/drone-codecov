@@ -1,0 +1,19 @@
+FROM --platform=$BUILDPLATFORM golang:1.17 AS build
+
+WORKDIR /src
+COPY . .
+ARG TARGETOS TARGETARCH
+RUN --mount=type=cache,target=/root/.cache/go-build \
+    --mount=type=cache,target=/go/pkg \
+    GOOS=${TARGETOS} GOARCH=${TARGETARCH} go build -ldflags '-s -w -extldflags "-static"' -o plugin-codecov
+RUN GOOS=${TARGETOS} GOARCH=${TARGETARCH} go run download.go
+
+FROM scratch
+
+COPY --from=build /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
+COPY --from=build src/dist/woodpecker-agent /bin/
+
+COPY --from=build src/codecov /bin/
+COPY --from=build src/plugin-codecov /bin/
+
+ENTRYPOINT ["/bin/plugin-codecov"]

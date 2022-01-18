@@ -40,21 +40,22 @@ func main() {
 
 	fmt.Printf("Download '%s' ...\n", downloadURL)
 
-	resp, err := http.Client{
+	client := &http.Client{
 		CheckRedirect: func(r *http.Request, via []*http.Request) error {
 			r.URL.Opaque = r.URL.Path
 			return nil
 		},
-	}.Get(downloadURL)
+	}
+	resp, err := client.Get(downloadURL)
 	checkErr(err)
 	defer resp.Body.Close()
 
 	file, err := os.Create(fileName)
 	checkErr(err)
 	defer file.Close()
-	checkErr(file.Chmod(0o444))
 
 	io.Copy(file, resp.Body)
+	checkErr(file.Chmod(0o555))
 }
 
 func checkErr(err error) {

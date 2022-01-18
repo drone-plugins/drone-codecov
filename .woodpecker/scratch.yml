@@ -1,0 +1,33 @@
+pipeline:
+  build:
+    image: golang:1.16
+    commands:
+      - make build
+
+  dryrun:
+    image: plugins/docker
+    dockerfile: docker/Dockerfile.multiarch
+    dry_run: true
+    repo: woodpeckerci/plugin-codecov
+    tags: latest
+    when:
+      event: pull_request
+
+  publish-next:
+    image: plugins/docker
+    dockerfile: docker/Dockerfile.multiarch
+    repo: woodpeckerci/plugin-codecov
+    tags: next
+    secrets: [docker_username, docker_password]
+    when:
+      branch: master
+      event: push
+
+  publish-tag:
+    image: plugins/docker
+    dockerfile: docker/Dockerfile.multiarch
+    repo: woodpeckerci/plugin-codecov
+    tags: [latest, "${DRONE_TAG}"]
+    secrets: [docker_username, docker_password]
+    when:
+      event: tag

@@ -1,8 +1,0 @@
-FROM plugins/base:linux-amd64
-
-RUN apk add --no-cache bash git mercurial curl && \
-  curl -sLo /bin/codecov https://codecov.io/bash && \
-  chmod +x /bin/codecov
-
-ADD release/linux/amd64/drone-codecov /bin/
-ENTRYPOINT ["/bin/drone-codecov"]
