@@ -1,11 +1,16 @@
 package main
 
 import (
+	"os"
 	"strings"
 )
 
 func (p *Plugin) generateArgs() []string {
 	args := []string{"-Q", "'Woodpecker Plugin'"}
+
+	if path, err := os.Getwd(); err == nil {
+		args = append(args, "--rootDir", path)
+	}
 
 	if p.Name != "" {
 		args = append(args, "--name", p.Name)
