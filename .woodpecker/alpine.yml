@@ -5,7 +5,7 @@ pipeline:
       dockerfile: docker/Dockerfile.alpine
       dry_run: true
       repo: woodpeckerci/plugin-codecov
-      tag: latest-alpine
+      tag: test
     when:
       event: pull_request
 

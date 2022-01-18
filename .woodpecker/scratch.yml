@@ -6,7 +6,7 @@ pipeline:
       dry_run: true
       repo: woodpeckerci/plugin-codecov
       platforms: linux/amd64,windows/amd64,darwin/amd64
-      tag: latest
+      tag: test
     when:
       event: pull_request
 
