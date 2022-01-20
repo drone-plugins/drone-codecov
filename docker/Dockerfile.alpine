@@ -3,7 +3,7 @@ FROM golang:1.17 AS build
 WORKDIR /src
 COPY . .
 RUN go build -ldflags '-s -w -extldflags "-static"' -o plugin-codecov
-RUN curl -Os https://uploader.codecov.io/latest/alpine/codecov
+RUN curl -Os https://uploader.codecov.io/v0.1.15/alpine/codecov
 RUN chmod +x codecov
 
 FROM alpine:3.15
