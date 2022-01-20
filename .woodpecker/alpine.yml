@@ -1,0 +1,31 @@
+pipeline:
+  dryrun:
+    image: plugins/docker
+    settings:
+      dockerfile: docker/Dockerfile.alpine
+      dry_run: true
+      repo: woodpeckerci/plugin-codecov
+      tag: test
+    when:
+      event: pull_request
+
+  publish-next:
+    image: plugins/docker
+    settings:
+      dockerfile: docker/Dockerfile.alpine
+      repo: woodpeckerci/plugin-codecov
+      tag: next-alpine
+    secrets: [docker_username, docker_password]
+    when:
+      branch: master
+      event: push
+
+  publish-tag:
+    image: plugins/docker
+    settings:
+      dockerfile: docker/Dockerfile.alpine
+      repo: woodpeckerci/plugin-codecov
+      tag: [latest-alpine, "${DRONE_TAG}-alpine"]
+    secrets: [docker_username, docker_password]
+    when:
+      event: tag

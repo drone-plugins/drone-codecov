@@ -27,4 +27,7 @@ release/
 vendor/
 
 coverage.out
-drone-codecov
+plugin-codecov
+codecov
+
+.idea/
